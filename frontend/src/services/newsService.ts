@@ -1,4 +1,5 @@
 import { FALLBACK_NEWS, NewsItem, NewsPriority } from '@/data/news';
+import { CURRENT_SCHEMES } from '@/data/schemes';
 
 const FEED_URLS = [
   'https://news.google.com/rss/search?q=Markapuram+OR+Prakasam+district+Andhra+Pradesh+when:7d&hl=en-IN&gl=IN&ceid=IN:en',
@@ -17,6 +18,31 @@ const IMPORTANT_KEYWORDS = [
   'launch',
   'released',
   'critical',
+];
+
+// Hide legacy/deprecated scheme mentions from external feeds.
+const BLOCKED_PATTERNS = [
+  /\bysr\b/i,
+  /\by\.?s\.?r\b/i,
+  /\ba+sa+ra\b/i,
+  /\baasara\b/i,
+  /\basara\b/i,
+  /వైఎస్సార్/i,
+  /ఆసరా/i,
+];
+const MAX_NEWS_AGE_DAYS = 7;
+
+const ACTIVE_SCHEME_KEYWORDS = [
+  ...CURRENT_SCHEMES.map((s) => s.slug.toLowerCase().replace(/-/g, ' ')),
+  ...CURRENT_SCHEMES.map((s) => s.name.toLowerCase()),
+  'pm kisan',
+  'mgnregs',
+  'mgnrega',
+  'pmay g',
+  'pm jay',
+  'ayushman bharat',
+  'svanidhi',
+  'vishwakarma',
 ];
 
 function parseDate(value?: string | null): string {
@@ -85,6 +111,30 @@ function dedupeAndSort(items: NewsItem[]): NewsItem[] {
   return deduped.sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
 }
 
+function isStale(dateIso: string): boolean {
+  const t = Date.parse(dateIso);
+  if (Number.isNaN(t)) return true;
+  const ageMs = Date.now() - t;
+  return ageMs > MAX_NEWS_AGE_DAYS * 24 * 60 * 60 * 1000;
+}
+
+function containsBlockedTerms(text: string): boolean {
+  return BLOCKED_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function isCurrentSchemeMention(text: string): boolean {
+  const normalized = text.toLowerCase().replace(/[-_/]/g, ' ');
+  return ACTIVE_SCHEME_KEYWORDS.some((k) => normalized.includes(k));
+}
+
+function shouldKeepItem(item: NewsItem): boolean {
+  if (isStale(item.publishedAt)) return false;
+  const blob = `${item.title} ${item.summary}`;
+  if (containsBlockedTerms(blob)) return false;
+  if (item.category === 'Schemes' && !isCurrentSchemeMention(blob)) return false;
+  return true;
+}
+
 async function fetchOneFeed(feedUrl: string): Promise<NewsItem[]> {
   const proxied = `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`;
   const response = await fetch(proxied, { cache: 'no-store' });
@@ -99,7 +149,7 @@ export async function getLiveNews(): Promise<NewsItem[]> {
     .filter((r): r is PromiseFulfilledResult<NewsItem[]> => r.status === 'fulfilled')
     .flatMap((r) => r.value);
 
-  const merged = dedupeAndSort([...live, ...FALLBACK_NEWS]);
+  const merged = dedupeAndSort([...live, ...FALLBACK_NEWS]).filter(shouldKeepItem);
   return merged.slice(0, 40);
 }
 
