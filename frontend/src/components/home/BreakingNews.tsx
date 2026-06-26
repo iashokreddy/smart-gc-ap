@@ -1,24 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Radio } from 'lucide-react'
-
-const MOCK_UPDATES = [
-  'New road construction completed on NH-65 stretch — Markapuram to Giddalur',
-  'Veligonda Phase-2 tunneling progress: 87% complete',
-  'Upcoming health camp at PHC Markapuram on June 30, 2026',
-  'District collector review meeting on irrigation projects — June 28, 2026',
-]
+import { useLiveNews } from '@/hooks/useLiveNews'
+import { formatPublishedTime } from '@/services/newsService'
 
 export function BreakingNews() {
+  const { items, important, loading, lastUpdated } = useLiveNews()
   const [index, setIndex] = useState(0)
 
+  const tickerItems = important.length > 0 ? important : items
+
   useEffect(() => {
+    if (!tickerItems.length) return
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % MOCK_UPDATES.length)
+      setIndex((i) => (i + 1) % tickerItems.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [])
+  }, [tickerItems.length])
+
+  useEffect(() => {
+    setIndex(0)
+  }, [tickerItems.length])
+
+  const activeItem = tickerItems[index]
 
   return (
     <div className="bg-red-600 text-white text-sm py-2 px-4 flex items-center gap-3 overflow-hidden">
@@ -27,14 +33,28 @@ export function BreakingNews() {
         <span>LATEST</span>
       </div>
       <div className="h-4 w-px bg-red-400 flex-shrink-0" />
-      <div
-        key={index}
-        className="animate-fade-in truncate"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {MOCK_UPDATES[index]}
-      </div>
+      {loading ? (
+        <div className="truncate" aria-live="polite" aria-atomic="true">
+          Loading latest verified updates...
+        </div>
+      ) : activeItem ? (
+        <Link
+          href="/news"
+          key={activeItem.id}
+          className="animate-fade-in truncate hover:underline"
+          aria-live="polite"
+          aria-atomic="true"
+          title={activeItem.title}
+        >
+          {activeItem.priority !== 'normal' ? '⚠️ ' : ''}
+          {activeItem.title} · {formatPublishedTime(activeItem.publishedAt)}
+          {lastUpdated ? ` · refreshed ${formatPublishedTime(lastUpdated.toISOString())}` : ''}
+        </Link>
+      ) : (
+        <div className="truncate" aria-live="polite" aria-atomic="true">
+          No updates at the moment. Please check back shortly.
+        </div>
+      )}
     </div>
   )
 }

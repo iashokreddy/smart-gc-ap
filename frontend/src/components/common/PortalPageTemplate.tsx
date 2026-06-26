@@ -1,3 +1,6 @@
+'use client';
+
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { MainLayout } from '@/components/layout/MainLayout';
 
@@ -20,6 +23,14 @@ export function PortalPageTemplate({
   ctaHref,
   sourceNote,
 }: PortalPageTemplateProps) {
+  const [query, setQuery] = useState('');
+
+  const filteredHighlights = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return highlights;
+    return highlights.filter((item) => item.toLowerCase().includes(q));
+  }, [highlights, query]);
+
   return (
     <MainLayout>
       <section className="container mx-auto px-4 py-10 md:py-14">
@@ -29,15 +40,32 @@ export function PortalPageTemplate({
           <p className="mt-4 text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
 
           {highlights.length > 0 && (
-            <div className="mt-8 grid sm:grid-cols-2 gap-3">
-              {highlights.map((item) => (
+            <div className="mt-8">
+              <div className="mb-3">
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search updates on this page..."
+                  className="w-full sm:w-96 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                {filteredHighlights.map((item) => (
                 <div
                   key={item}
                   className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 text-sm text-gray-700 dark:text-gray-200"
                 >
                   {item}
                 </div>
-              ))}
+                ))}
+              </div>
+
+              {filteredHighlights.length === 0 ? (
+                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                  No matching highlights for your search.
+                </p>
+              ) : null}
             </div>
           )}
 
@@ -55,6 +83,10 @@ export function PortalPageTemplate({
           {sourceNote ? (
             <p className="mt-8 text-xs text-gray-500 dark:text-gray-400">{sourceNote}</p>
           ) : null}
+
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            Last reviewed on {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}. For official decisions, verify with department notifications.
+          </p>
         </div>
       </section>
     </MainLayout>
