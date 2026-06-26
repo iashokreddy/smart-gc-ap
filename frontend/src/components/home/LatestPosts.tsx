@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Calendar, Tag } from 'lucide-react';
+import { ArrowRight, Calendar, Tag, ShieldCheck, ExternalLink } from 'lucide-react';
 import { POSTS } from '@/data/posts';
 
 export function LatestPosts() {
@@ -45,12 +45,21 @@ export function LatestPosts() {
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
                 {post.excerpt}
               </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                {post.sections.length} sections · {post.sections.reduce((n, s) => n + s.blocks.length, 0)} detailed blocks
+              </p>
               <div className="flex items-center justify-between text-xs text-gray-400">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
                   {new Date(post.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
                 <span>Source: {post.source}</span>
+              </div>
+              <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Updated: {post.lastUpdated}</span>
+                <a href={post.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-brand-600 dark:text-brand-400 hover:underline">
+                  Source link <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </article>
           ))}

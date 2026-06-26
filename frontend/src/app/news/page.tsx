@@ -117,6 +117,12 @@ export default function NewsPage() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">{item.title}</h2>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{item.summary}</p>
 
+              <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                <p>Published: {new Date(item.publishedAt).toLocaleString('en-IN')}</p>
+                <p>Recency: {formatPublishedTime(item.publishedAt)}</p>
+                <p>Trust signal: source-linked and refresh-validated feed item</p>
+              </div>
+
               <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                 <span>Source: {item.source}</span>
                 <a

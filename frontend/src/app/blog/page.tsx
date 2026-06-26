@@ -27,6 +27,10 @@ export default function BlogPage() {
                 </ul>
               </div>
 
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                {post.sections.length} sections · {post.sections.reduce((n, s) => n + s.blocks.length, 0)} information blocks
+              </p>
+
               <div className="mt-4 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
@@ -35,11 +39,17 @@ export default function BlogPage() {
                 ))}
               </div>
 
-              <div className="mt-5 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                <span>Updated: {post.lastUpdated}</span>
-                <Link href={`/blog/${post.slug}`} className="text-brand-600 dark:text-brand-400 hover:underline font-medium">
-                  See more →
-                </Link>
+              <div className="mt-5 text-xs text-gray-500 dark:text-gray-400 space-y-2">
+                <p>Updated: {post.lastUpdated}</p>
+                <p className="truncate">Source: {post.source}</p>
+                <div className="flex items-center justify-between">
+                  <a href={post.sourceUrl} target="_blank" rel="noreferrer" className="text-brand-600 dark:text-brand-400 hover:underline font-medium">
+                    Official source ↗
+                  </a>
+                  <Link href={`/blog/${post.slug}`} className="text-brand-600 dark:text-brand-400 hover:underline font-medium">
+                    See more →
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

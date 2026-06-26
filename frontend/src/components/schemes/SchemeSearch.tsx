@@ -10,7 +10,11 @@ const ALL_SCHEMES = CURRENT_SCHEMES.map((s) => ({
   name: s.name,
   category: s.category,
   description: s.description,
+  benefits: s.benefits,
   eligibility: s.eligibility,
+  sourceName: s.sourceName,
+  sourceUrl: s.sourceUrl,
+  lastVerified: s.lastVerified,
 }));
 
 export function SchemeSearch() {
@@ -65,12 +69,22 @@ export function SchemeSearch() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{scheme.description}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-300 mb-3">
+                  <span className="font-semibold">Benefits:</span> {scheme.benefits}
+                </p>
                 <div className="flex flex-wrap gap-1">
                   {scheme.eligibility.map((e) => (
                     <span key={e} className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full">
                       {e}
                     </span>
                   ))}
+                </div>
+                <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                  <p>Source: {scheme.sourceName}</p>
+                  <p>Last verified: {scheme.lastVerified}</p>
+                  <a href={scheme.sourceUrl} target="_blank" rel="noreferrer" className="text-brand-600 dark:text-brand-400 hover:underline">
+                    Official details ↗
+                  </a>
                 </div>
               </div>
               <a

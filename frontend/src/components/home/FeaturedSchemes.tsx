@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Users, Clock } from 'lucide-react';
+import { ArrowRight, Users, Clock, ShieldCheck, ExternalLink } from 'lucide-react';
 import { CURRENT_SCHEMES } from '@/data/schemes';
 
 const SCHEMES = CURRENT_SCHEMES.slice(0, 3).map((s) => ({
@@ -8,8 +8,12 @@ const SCHEMES = CURRENT_SCHEMES.slice(0, 3).map((s) => ({
   nameTe: s.nameTe,
   category: s.category,
   description: s.description,
+  benefits: s.benefits,
   deadline: 'Active',
   eligibility: s.eligibility.join(', '),
+  sourceName: s.sourceName,
+  sourceUrl: s.sourceUrl,
+  lastVerified: s.lastVerified,
   href: `/schemes/${s.slug}`,
 }));
 
@@ -60,6 +64,9 @@ export function FeaturedSchemes() {
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
               {scheme.description}
             </p>
+            <p className="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+              <span className="font-semibold">Benefits:</span> {scheme.benefits}
+            </p>
             <div className="flex items-center justify-between text-xs text-gray-400">
               <span className="flex items-center gap-1">
                 <Users className="w-3 h-3" /> {scheme.eligibility}
@@ -67,6 +74,13 @@ export function FeaturedSchemes() {
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" /> {scheme.deadline}
               </span>
+            </div>
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 space-y-1">
+              <p className="inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Verified: {scheme.lastVerified}</p>
+              <p className="truncate">Source: {scheme.sourceName}</p>
+              <a href={scheme.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-brand-600 dark:text-brand-400 hover:underline">
+                Official portal <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
           </Link>
         ))}
