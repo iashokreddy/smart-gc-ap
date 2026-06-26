@@ -1,38 +1,17 @@
 import Link from 'next/link';
 import { ArrowRight, Users, Clock } from 'lucide-react';
+import { CURRENT_SCHEMES } from '@/data/schemes';
 
-const SCHEMES = [
-  {
-    id: '1',
-    name: 'YSR Asara',
-    nameTe: 'వైఎస్ఆర్ ఆసరా',
-    category: 'Women',
-    description: 'Financial assistance of ₹15,000 per year for self-help group loans for women.',
-    deadline: '2026-07-15',
-    eligibility: 'Women SHG members',
-    href: '/schemes/ysr-asara',
-  },
-  {
-    id: '2',
-    name: 'Rythu Bharosa',
-    nameTe: 'రైతు భరోసా',
-    category: 'Farmers',
-    description: '₹13,500 per year investment support to farmers for agricultural needs.',
-    deadline: 'Ongoing',
-    eligibility: 'All registered farmers',
-    href: '/schemes/rythu-bharosa',
-  },
-  {
-    id: '3',
-    name: 'YSR Vidya Deevena',
-    nameTe: 'వైఎస్ఆర్ విద్యా దీవెన',
-    category: 'Students',
-    description: 'Full fee reimbursement for BC, SC, ST, EWS students in degree/PG courses.',
-    deadline: 'Ongoing',
-    eligibility: 'BC/SC/ST/EWS students',
-    href: '/schemes/ysr-vidya-deevena',
-  },
-];
+const SCHEMES = CURRENT_SCHEMES.slice(0, 3).map((s) => ({
+  id: s.id,
+  name: s.name,
+  nameTe: s.nameTe,
+  category: s.category,
+  description: s.description,
+  deadline: 'Active',
+  eligibility: s.eligibility.join(', '),
+  href: `/schemes/${s.slug}`,
+}));
 
 const CATEGORY_COLORS: Record<string, string> = {
   Women: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400',

@@ -1,28 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Calendar, Tag } from 'lucide-react';
-
-const POSTS = [
-  {
-    id: '1',
-    title: 'New irrigation canals bring water to 15 villages in Markapuram mandal',
-    slug: 'irrigation-canals-15-villages',
-    category: 'Infrastructure',
-    date: '2026-06-20',
-    excerpt: 'A new network of irrigation canals connecting the Veligonda reservoir has reached 15 villages, significantly improving water availability for rabi crops.',
-    isAIDraft: false,
-    source: 'District Irrigation Dept.',
-  },
-  {
-    id: '2',
-    title: 'YSR Vidya Deevena: How students from Markapuram are benefiting',
-    slug: 'ysr-vidya-deevena-markapuram',
-    category: 'Education',
-    date: '2026-06-18',
-    excerpt: 'Over 1,200 students from Markapuram area have received full fee reimbursement under the YSR Vidya Deevena scheme in the 2025-26 academic year.',
-    isAIDraft: true,
-    source: 'AP Education Dept. (official press release)',
-  },
-];
+import { POSTS } from '@/data/posts';
 
 export function LatestPosts() {
   return (

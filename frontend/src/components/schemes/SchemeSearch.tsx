@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 import { Search, X } from 'lucide-react';
+import { CURRENT_SCHEMES } from '@/data/schemes';
 
-const ALL_SCHEMES = [
-  { id: '1', name: 'YSR Asara', category: 'Women', description: 'Financial assistance of ₹15,000/year for SHG loan interest for women.', eligibility: ['Women', 'SHG Members'] },
-  { id: '2', name: 'Rythu Bharosa', category: 'Farmers', description: '₹13,500/year investment support for farmers.', eligibility: ['Farmers'] },
-  { id: '3', name: 'YSR Vidya Deevena', category: 'Students', description: 'Full fee reimbursement for BC/SC/ST/EWS students.', eligibility: ['Students', 'BC', 'SC', 'ST', 'EWS'] },
-  { id: '4', name: 'YSR Pension Kanuka', category: 'Senior Citizens', description: '₹3,000/month pension for eligible senior citizens.', eligibility: ['Senior Citizens'] },
-  { id: '5', name: 'Jagananna Amma Vodi', category: 'Parents', description: '₹15,000/year for mothers sending children to school.', eligibility: ['Women', 'Parents'] },
-  { id: '6', name: 'YSR Rythu Bharosa — PM-KISAN', category: 'Farmers', description: 'Combined state and central scheme: ₹13,500 + ₹6,000/year.', eligibility: ['Farmers'] },
-  { id: '7', name: 'NREGS', category: 'Employment', description: '100 days guaranteed employment for rural households.', eligibility: ['Rural Adults'] },
-  { id: '8', name: 'PM Awas Yojana (Gramin)', category: 'Housing', description: 'Financial aid for rural housing construction.', eligibility: ['BPL', 'Rural'] },
-];
+const ALL_SCHEMES = CURRENT_SCHEMES.map((s) => ({
+  id: s.id,
+  slug: s.slug,
+  name: s.name,
+  category: s.category,
+  description: s.description,
+  eligibility: s.eligibility,
+}));
 
 export function SchemeSearch() {
   const [query, setQuery] = useState('');
@@ -75,7 +74,7 @@ export function SchemeSearch() {
                 </div>
               </div>
               <a
-                href={`/schemes/${scheme.id}`}
+                href={`/schemes/${scheme.slug}`}
                 className="flex-shrink-0 text-sm font-medium text-brand-600 dark:text-brand-400 hover:underline whitespace-nowrap"
               >
                 Learn More →

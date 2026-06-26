@@ -11,11 +11,12 @@ export function EligibilityCalculator() {
   const handleCheck = () => {
     // Simple rule-based matching (replace with AI-powered backend call)
     const matched: string[] = [];
-    if (form.gender === 'female') matched.push('YSR Asara', 'Jagananna Amma Vodi');
-    if (form.occupation === 'farmer') matched.push('Rythu Bharosa', 'Rythu Bharosa-PM-KISAN');
-    if (form.occupation === 'student') matched.push('YSR Vidya Deevena', 'Vasathi Deevena');
-    if (parseInt(form.age) >= 60) matched.push('YSR Pension Kanuka');
-    if (form.income === 'below_poverty') matched.push('PM Awas Yojana', 'NREGS');
+    if (form.occupation === 'farmer') matched.push('PM-KISAN', 'MGNREGS');
+    if (form.occupation === 'student') matched.push('PM Vishwakarma');
+    if (form.occupation === 'unemployed') matched.push('MGNREGS', 'PM SVANidhi');
+    if (parseInt(form.age) >= 60) matched.push('Ayushman Bharat PM-JAY');
+    if (form.income === 'below_poverty') matched.push('PM Awas Yojana (Gramin)', 'Ayushman Bharat PM-JAY');
+    if (form.occupation === 'business') matched.push('PM SVANidhi');
     setResults(matched.length > 0 ? matched : []);
   };
 
