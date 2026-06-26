@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SITE_OWNER } from '@/data/siteOwner';
 
 export function Footer() {
   return (
@@ -60,16 +61,16 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-3">Contact</h4>
             <address className="not-italic text-sm space-y-2 text-gray-400">
-              <p>Markapuram District Collectorate</p>
-              <p>Prakasam District, Andhra Pradesh</p>
+              <p>Site Owner: {SITE_OWNER.name}</p>
+              <p>Markapuram, Andhra Pradesh</p>
               <p>
-                <a href="tel:1800-425-0099" className="hover:text-white">
-                  Helpline: 1800-425-0099
+                <a href={`tel:${SITE_OWNER.phone}`} className="hover:text-white">
+                  Phone: {SITE_OWNER.phone}
                 </a>
               </p>
               <p>
-                <a href="mailto:collector@markapuram.ap.gov.in" className="hover:text-white">
-                  collector@markapuram.ap.gov.in
+                <a href={`mailto:${SITE_OWNER.email}`} className="hover:text-white">
+                  {SITE_OWNER.email}
                 </a>
               </p>
             </address>
